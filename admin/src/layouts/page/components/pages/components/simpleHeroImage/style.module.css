@@ -1,0 +1,46 @@
+.textinput {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+  margin-top: 20px;
+}
+.content > h5 {
+  margin-bottom: 20px;
+}
+.content .pageContent {
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  grid-auto-rows: auto;
+  padding: 10px;
+  gap: 5px;
+  width: 100%;
+}
+.content .pageContent div:nth-child(1) {
+  grid-column-start: 1;
+  grid-column-end: -1;
+}
+.content .pageContent div:nth-child(2) {
+  grid-column-start: 1;
+  grid-column-end: 9;
+}
+
+.content .pageContent div:nth-child(3) {
+  grid-column-start: 9;
+  grid-column-end: -1;
+}
+.buttonBox {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.buttonBox .button {
+  padding: 10px 40px;
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  border-radius: 5px;
+  cursor: pointer;
+}

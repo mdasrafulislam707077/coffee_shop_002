@@ -1,0 +1,7 @@
+/client/node_modules
+/client/.next
+# /client/.env
+/admin/node_modules
+/ml/env/Lib
+# /admin/.env
+/test

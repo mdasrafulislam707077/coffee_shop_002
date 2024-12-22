@@ -1,0 +1,18 @@
+.main {
+  width: 100%;
+  display: flex;
+}
+.main .link {
+  margin-left: 10px;
+  color: rgb(83, 82, 82);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 900;
+  cursor: pointer;
+  padding: 0 10px;
+}
+
+.main .activelink {
+  color: rgb(0, 0, 0);
+  border-bottom: 1px solid black;
+}

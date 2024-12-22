@@ -1,0 +1,52 @@
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination .MuiPagination-ul {
+    justify-content: center;
+    padding: 0;
+  }
+  
+  .pagination .MuiPaginationItem-root {
+    color: #ffffff;
+    font-weight: bold;
+    margin: 0 5px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .pagination .MuiPaginationItem-root:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+  }
+  
+  .pagination .Mui-selected {
+    background-color: #575757 !important;
+    color: white;
+  }
+  
+
+
+  .custom-select {
+    background-color: #909090;
+    border-radius: 4px;
+    background-color: rgba(0, 123, 255, 0.1); /* Custom hover effect */
+    border:2px solid #ffffff; /* Set custom focus border color */
+    box-shadow:none; /* Optional: Add a box shadow */
+    color: white;
+  }
+  
+  .custom-menu-item {
+    color: #ff0000; 
+   
+  }
+  
+  .custom-menu-item:hover {
+   
+  }
+
+  .custom-select:focus {
+    outline: none; /* Remove default focus outline */
+    border-color: #ff6200; /* Set custom focus border color */
+  }

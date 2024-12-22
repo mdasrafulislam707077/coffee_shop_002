@@ -1,0 +1,68 @@
+.main{
+    position: relative;
+    background-color: rgb(255, 255, 255); 
+    padding-top: 10px;
+}
+.main .homeHero{
+    width: 330px;
+    position: relative;
+    margin: auto;
+}
+.main .checkinput{
+    display: flex;
+    align-items: center;
+  }
+  .main .checkinput .checkText{
+    font-size: 14px;
+    font-weight: 900;
+  }
+  .main .inputBox {
+    margin-top: 10px;
+    padding: 5px;
+    width: 100%;
+  }
+  .main .inputBox .input {
+    width: 100%;
+
+  }
+.main .alternative{
+    width: 100%;
+}
+
+.main .alternative {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 100px);
+    margin-top: 10px;
+    grid-gap: 5px;
+    justify-content: center;
+  }
+.main .alternative .item {
+    aspect-ratio: 1/1;
+    background-color: red;
+  }
+.main .alternative .itemAdd {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 30px;
+    cursor: pointer;
+    padding: 0;
+    background-color: transparent;
+  }
+
+.buttonBox{
+    width: 100%;
+    padding: 10px;
+    position: relative;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+}
+.button{
+    padding: 10px 20px;
+    position: relative;
+    background-color: black;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+}

@@ -1,0 +1,48 @@
+.fileInput300px {
+  width: 300px;
+}
+.fileInputFull {
+  width: 100%;
+}
+.fullHeight{
+  height: 100%;
+}
+.fileInput {
+  aspect-ratio: 2/1.1;
+  background-color: rgba(0, 0, 0, 0.93);
+  margin-right: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+.fileInput .addImage,
+.cross {
+  height: 40px;
+  width: 40px;
+  background-color: rgb(140, 140, 140);
+  border-radius: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 30px;
+  color: aliceblue;
+  cursor: pointer;
+  transition: 0.4s;
+}
+.fileInput .cross {
+  right: 2%;
+  top: 2%;
+  position: absolute;
+  z-index: 11;
+  transform: rotate(45deg);
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.368);
+}
+.fileInput .addImage:hover {
+  transform: scale(0.96);
+}
+.fileInput img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}

@@ -1,0 +1,8 @@
+const actionName = {
+    ALL_TOKEN_INJECT:"ALL_TOKEN_INJECT",
+    ACTIVE_TOKEN:"ACTIVE_TOKEN",
+    REMOVE_TOKEN:"REMOVE_TOKEN",
+    ALL_REMOVE_LIST:"ALL_REMOVE_LIST",
+}
+
+export default actionName

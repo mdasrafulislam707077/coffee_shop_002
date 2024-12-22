@@ -1,0 +1,21 @@
+.main {
+  width: 100%;
+  position: relative;
+}
+.main .traningButton {
+  padding: 10px 30px;
+  background-color: black;
+  color: white;
+  font-weight: 500;
+  border-radius: 5px;
+  font-size: 14px;
+  width: fit-content;
+  cursor: pointer;
+}
+
+
+.main .message{
+  font-size: 14px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}

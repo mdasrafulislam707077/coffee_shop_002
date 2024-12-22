@@ -1,0 +1,16 @@
+.main{
+    display: flex;
+}
+
+.main .tabItems{
+    margin-right: 15px;
+    margin-left: 15px;
+    font-size: 14px;
+    cursor: pointer;
+   
+}
+
+.main .tabItemsActive{
+    border-bottom: 1px solid #49a3f1;
+    color: #676e75;
+}

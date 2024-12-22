@@ -1,0 +1,51 @@
+.blogItemsBox {
+  display: grid;
+
+  grid-auto-rows: auto;
+  width: 100%;
+  grid-gap: 10px;
+  margin-top: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+}
+.blogItemsBox .blogItems {
+}
+
+.blogItemsBox .blank {
+  background-color: rgb(78, 78, 78);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+}
+.blogItemsBox .blank .add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(112, 112, 112, 0.486);
+  font-size: 30px;
+  height: 40px;
+  width: 40px;
+  color: white;
+  cursor: pointer;
+}
+
+.blogItemsBox .blogItems .inputText {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.blogItemsBox .blogItems .header {
+}
+
+.buttonBox {
+  display: flex;
+  width: 100%;
+  margin-top: 10px;
+}
+.button {
+  padding: 10px 30px;
+  background-color: black;
+  color: white;
+  font-size: 14px;
+  border-radius: 5px;
+}

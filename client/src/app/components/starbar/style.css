@@ -1,0 +1,25 @@
+/* StarRatingStyles.css */
+.rating-container {
+    text-align: center;
+    font-family: Arial, sans-serif;
+  }
+  
+  .rating-container h2 {
+    margin-bottom: 10px;
+  }
+  
+  .rating-container .fa-star {
+    font-size: 30px;
+    color: #ffb400;
+    margin: 0 2px;
+  }
+  
+  .rating-container .far.fa-star {
+    color: #333;
+  }
+  
+  .rating-value {
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  
