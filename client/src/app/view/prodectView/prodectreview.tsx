@@ -6,6 +6,7 @@ import LikeIcon from "@/app/assets/icon/favorite-svgrepo-com (1).svg";
 import ActiveLikeIcon from "@/app/assets/icon/favorite-svgrepo-com (2).svg";
 import OptionIcon from "@/app/assets/icon/option.svg";
 import PaymentBox from "@/app/components/dialogBox/paymentBox";
+import PaymentConfirmToast from "@/app/components/dialogBox/paymentConfirm";
 import { fonts } from "@/app/components/fonts/font";
 import Footer from "@/app/components/footer/footer";
 import LoginAndCreateToast from "@/app/components/login_and_create/toast";
@@ -14,6 +15,7 @@ import ProdectCard from "@/app/components/prodectCard/card";
 import RatingComponent from "@/app/components/starbar/starbar";
 import Toast from "@/app/components/toast/toast";
 import favoritePost from "@/app/network/favorite/favorite";
+import { prodectCheck } from "@/app/network/prodect_process/prodect_process";
 import { injectProdect } from "@/app/redux/cart/actions";
 import injectFavoriteItems from "@/app/redux/favorite/action";
 import { singleToastActive } from "@/app/redux/toats/action";
@@ -21,6 +23,12 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { prodectBuy } from "@/app/network/prodect_process/prodect_process";
+const ToastType = {
+  PAYMENT_INFO: "PAYMENT_INFO",
+  BUY_PROCESS: "BUY_PROCESS",
+};
+
 interface ProdectReviewProps {
   prodectDetails: Object;
   prodectItems: Array;
@@ -38,6 +46,10 @@ export default function ProdectReview(props: ProdectReviewProps) {
   const favoItem = useSelector((state) => state.favoriteReducer?.items);
   const tokenInfo = useSelector((state) => state.tokenReducers);
   const dispatch = useDispatch();
+  const [toastType, setToastType] = useState(null);
+  const [pymentMsg, setPaymentMsg] = useState(null);
+  const [activeButtons, setActiveButtons] = useState(null);
+  const [tokenStore,setTokenStore] = useState(null)
   useEffect(() => {
     if (props.prodectDetails) {
       setImageList([
@@ -55,10 +67,68 @@ export default function ProdectReview(props: ProdectReviewProps) {
           setActiveLoginToast(false);
         }}
       />
-      <Toast center activetoast={toastActive}>
-        <PaymentBox onClose={()=>{
-          setToastActive(false);
-        }}/>
+      <Toast center activetoast={toastType}>
+        {toastType == ToastType.PAYMENT_INFO ? (
+          <PaymentBox
+          onSelectToken={(ele)=>setTokenStore(ele.token)}
+            onClose={() => {
+              setToastType(null);
+            }}
+          />
+        ) : null}
+        {toastType == ToastType.BUY_PROCESS ? (
+          <PaymentConfirmToast
+          activeButton={activeButtons}
+            message={pymentMsg}
+            onCheck={() => {
+              prodectCheck(
+                {
+                  id: props.prodectDetails?._id,
+                  count: cartCount,
+                  price: props.prodectDetails.price,
+                  discount: props.prodectDetails.discount,
+                },
+                (res) => {
+                  if (res.data) {
+                    if (res.data.errMsg) {
+                      setPaymentMsg(res.data.errMsg);
+                    } else {
+                      setPaymentMsg(
+                        "Everything looks good! Are you sure you want to buy it?"
+                      );
+                      setActiveButtons(true);
+                    }
+                  } else {
+                    setPaymentMsg("server-side issue.try again later");
+                  }
+                }
+              );
+            }}
+            onYes={()=>{
+              prodectBuy({
+                id: props.prodectDetails?._id,
+                count: cartCount,
+                price: props.prodectDetails.price,
+                discount: props.prodectDetails.discount,
+                token:tokenStore
+              },(res)=>{
+                console.log(res)
+              })
+              
+            }}
+            onClose={() => {
+              setToastType(null);
+              setPaymentMsg(null);
+              setActiveButtons(false);
+            }}
+            onNo={() => {
+              setPaymentMsg(null);
+              setActiveButtons(false);
+
+              setToastType(null);
+            }}
+          />
+        ) : null}
       </Toast>
 
       <Navheader
@@ -196,7 +266,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
 
               <div className="w-fit relative flex mt-2">
                 <div
-                  className="h-10 w-10 relative text-white cursor-pointer border-2 border-white flex justify-center items-center text-2xl hover:scale-[0.99] transition-all"
+                  className="h-10 w-10 relative text-white cursor-pointer border-2 border-white flex justify-center items-center text-2xl hover:scale-[0.99] transition-all pb-1"
                   onClick={() =>
                     setCartCount((value) => {
                       return value + 1;
@@ -216,7 +286,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
                   />
                 </div>
                 <div
-                  className="h-10 w-10 relative text-white cursor-pointer border-2 border-white flex justify-center items-center text-2xl hover:scale-[0.99] transition-all"
+                  className="h-10 w-10 relative text-white cursor-pointer border-2 border-white flex justify-center items-center text-2xl hover:scale-[0.99] transition-all pb-2"
                   onClick={() =>
                     setCartCount((value) => {
                       if (value <= 0) {
@@ -237,6 +307,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
                     if (!(userInfo.email && userInfo.name)) {
                       setActiveLoginToast(true);
                     } else {
+                      setToastType(ToastType.BUY_PROCESS);
                     }
                   }}
                 >
@@ -392,7 +463,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
                   <div
                     className="h-7 w-7 ml-4 cursor-pointer"
                     onClick={() => {
-                      setToastActive(true);
+                      setToastType(ToastType.PAYMENT_INFO);
                     }}
                   >
                     <OptionIcon fill="white" />

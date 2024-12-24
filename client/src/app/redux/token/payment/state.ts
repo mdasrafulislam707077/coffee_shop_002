@@ -1,12 +1,6 @@
 const paymentToken = {
-    listOfToken:[
+  items: [],
+  email: { token: "asdas3" },
+};
 
-        { token: "asdas1" },
-        { token: "asdas2" },
-        { token: "asdas3" },
-
-    ],
-    activeToken: { token: "asdas3" },
-}
-
-export default paymentToken
+export default paymentToken;

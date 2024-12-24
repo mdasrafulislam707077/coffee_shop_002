@@ -25,3 +25,62 @@ export function getToken(info, callback) {
       }
     });
 }
+
+export function createPaymentToken(info:any,callback:any){
+  const formData  = new FormData()
+  formData.append("token",info.token)
+  formData.append("email",info.email)
+  axios
+    .post(
+      `${config.HOST_SERVER_BASE_POINT}/payment_token/add_token`,
+      formData
+    )
+    .then((res) => {
+      if (callback) {
+        callback(res);
+      }
+    })
+    .catch((err) => {
+      if (callback) {
+        callback(err);
+      }
+    });
+}
+
+
+export function getlistOfPaymentToken(info:any,callback:any){
+  axios
+  .get(
+    `${config.HOST_SERVER_BASE_POINT}/payment_token/get_payment?email=${info.email}`
+  )
+  .then((res) => {
+    if (callback) {
+      callback(res);
+    }
+  })
+  .catch((err) => {
+    if (callback) {
+      callback(err);
+    }
+  });
+}
+
+
+
+
+export function deleteToken(info:any,callback:any){
+  axios
+  .delete(
+    `${config.HOST_SERVER_BASE_POINT}/payment_token/delete_token?email=${info.email}&token=${info.token}`
+  )
+  .then((res) => {
+    if (callback) {
+      callback(res);
+    }
+  })
+  .catch((err) => {
+    if (callback) {
+      callback(err);
+    }
+  });
+}

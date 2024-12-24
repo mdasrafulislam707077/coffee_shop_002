@@ -1,21 +1,45 @@
+import DeleteIcon from "@/app/assets/icon/delete.svg";
 import TokenIcon from "@/app/assets/icon/token.svg";
-
 import TransitionIcon from "@/app/assets/icon/wallet-svgrepo-com.svg";
-import { getToken } from "@/app/network/payment/getToken";
-import { activeToken } from "@/app/redux/token/payment/action";
+import {
+  createPaymentToken,
+  getToken,
+  getlistOfPaymentToken,
+  deleteToken
+} from "@/app/network/payment/getToken";
+import { activeToken, injectToken } from "@/app/redux/token/payment/action";
+import actionName from "@/app/redux/token/payment/actionName";
 import { TextField } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fonts } from "../fonts/font";
+import { removeToken } from "@/app/redux/token/payment/action";
 interface PaymentBoxProps {
   onClose: any;
+  onSelectToken:any
 }
 export default function PaymentBox(props: PaymentBoxProps) {
   const tokenInfo = useSelector((state) => state.tokenReducers);
+  const userInfo = useSelector((state) => state.userInfo);
   const dispatch = useDispatch();
   const [tokenGen, setTokenGen] = useState(null);
   const [paymentToken, setPaymentToken] = useState("");
-
+  useEffect(() => {
+    if (userInfo.email) {
+      getlistOfPaymentToken({ email: userInfo.email }, (res) => {
+        if (res.data) {
+          if (res.data.item.items) {
+            dispatch(
+              injectToken({
+                type: actionName.ALL_TOKEN_INJECT,
+                list: res.data.item.items,
+              })
+            );
+          }
+        }
+      });
+    }
+  }, [userInfo.email]);
   return (
     <div className="aspect-video w-[1200px] bg-white shadow-lg flex flex-col">
       <div className="w-full relative p-2 pr-3 flex items-end justify-end cursor-pointer">
@@ -44,7 +68,7 @@ export default function PaymentBox(props: PaymentBoxProps) {
               onClick={() => {
                 getToken(
                   {
-                    email_client: "asraful@gmail.com",
+                    email_client: userInfo.email,
                   },
                   (res) => {
                     if (res?.data) {
@@ -57,9 +81,9 @@ export default function PaymentBox(props: PaymentBoxProps) {
               +
             </div>
           </h3>
-          <div className="w-full relative pr-5 flex-grow overflow-y-scroll max-h-[450px] mb-2">
+          <div className="w-full relative pr-5 flex-grow overflow-y-auto max-h-[450px] mb-2">
             {!tokenGen ? (
-              tokenInfo?.listOfToken?.map((ele, index) => {
+              tokenInfo?.listOfToken?.list?.map((ele, index) => {
                 const time = Date.now();
                 return (
                   <div
@@ -72,7 +96,7 @@ export default function PaymentBox(props: PaymentBoxProps) {
                         <TokenIcon fill="white" />
                       </div>
                       <div className={`${fonts.font_7.className} h-fit`}>
-                        Token-Name
+                        Token-{index + 1}
                       </div>
                       <div className="flex-grow  flex justify-end">
                         <label htmlFor={`${time}`} className="flex">
@@ -90,8 +114,14 @@ export default function PaymentBox(props: PaymentBoxProps) {
                                   ele?.token != tokenInfo?.activeToken?.token
                                 ) {
                                   dispatch(activeToken(ele));
+                                  if (props.onSelectToken) {
+                                    props.onSelectToken(ele)
+                                  }
                                 } else {
                                   dispatch(removeToken());
+                                  if (props.onSelectToken) {
+                                    props.onSelectToken(null)
+                                  }
                                 }
                               }}
                             />
@@ -105,8 +135,24 @@ export default function PaymentBox(props: PaymentBoxProps) {
                         </label>
                       </div>
                     </div>
-                    <div className="px-3 text-ellipsis overflow-hidden whitespace-nowrap text-xs">
-                      asdasdsa
+                    <div className="px-3 text-ellipsis overflow-hidden whitespace-nowrap text-xs flex justify-between">
+                      <div className="w-full relative text-ellipsis overflow-hidden flex-grow">
+                        {ele.token}
+                      </div>
+                      <div className=" aspect-square relative min-h-6 max-h-6 h-6 p-1" onClick={()=>{
+                        deleteToken({email:userInfo.email,token:ele.token},(res)=>{
+                          if (res.data) {
+                              if (res.data.item) {
+                                dispatch(injectToken({
+                                  type: actionName.ALL_TOKEN_INJECT,
+                                  list:res.data.item.items,
+                                }))
+                              }
+                          }
+                        })
+                      }} >
+                        <DeleteIcon />
+                      </div>
                     </div>
                   </div>
                 );
@@ -122,9 +168,7 @@ export default function PaymentBox(props: PaymentBoxProps) {
                     onClick={() => {
                       navigator.clipboard
                         .writeText(tokenGen)
-                        .then(() => {
-                          console.log(tokenGen);
-                        })
+                        .then(() => {})
                         .catch((err) => {});
                     }}
                   ></div>
@@ -140,9 +184,26 @@ export default function PaymentBox(props: PaymentBoxProps) {
                   />
                 </div>
                 <div className="w-full relative flex justify-end mt-3">
-                  <div className=" relative  w-fit px-4 py-2 bg-slate-950 text-white text-xs cursor-pointer rounded-sm" onClick={()=>{
-                    
-                  }}>
+                  <div
+                    className=" relative  w-fit px-4 py-2 bg-slate-950 text-white text-xs cursor-pointer rounded-sm"
+                    onClick={() => {
+                      createPaymentToken(
+                        { email: userInfo.email, token: paymentToken },
+                        (callb) => {
+                          if (callb?.data && callb?.data?.item?.items) {
+                            dispatch(
+                              injectToken({
+                                type: actionName.ALL_TOKEN_INJECT,
+                                list: callb.data.item.items,
+                              })
+                            );
+                            setTokenGen(null);
+                          } else {
+                          }
+                        }
+                      );
+                    }}
+                  >
                     Add-Token
                   </div>
                 </div>
