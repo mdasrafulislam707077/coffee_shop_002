@@ -20,6 +20,7 @@ export async function DELETE(req: NextRequest, res) {
     obj = {
       items: newData.items,
       email: newData.email,
+      record: newData.record
     };
     await createPaymentToken({
       ...obj,

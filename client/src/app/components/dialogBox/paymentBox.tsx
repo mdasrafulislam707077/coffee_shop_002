@@ -3,20 +3,23 @@ import TokenIcon from "@/app/assets/icon/token.svg";
 import TransitionIcon from "@/app/assets/icon/wallet-svgrepo-com.svg";
 import {
   createPaymentToken,
+  deleteToken,
   getToken,
   getlistOfPaymentToken,
-  deleteToken
 } from "@/app/network/payment/getToken";
-import { activeToken, injectToken } from "@/app/redux/token/payment/action";
+import {
+  activeToken,
+  injectToken,
+  removeToken,
+} from "@/app/redux/token/payment/action";
 import actionName from "@/app/redux/token/payment/actionName";
 import { TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fonts } from "../fonts/font";
-import { removeToken } from "@/app/redux/token/payment/action";
 interface PaymentBoxProps {
   onClose: any;
-  onSelectToken:any
+  onSelectToken: any;
 }
 export default function PaymentBox(props: PaymentBoxProps) {
   const tokenInfo = useSelector((state) => state.tokenReducers);
@@ -24,11 +27,13 @@ export default function PaymentBox(props: PaymentBoxProps) {
   const dispatch = useDispatch();
   const [tokenGen, setTokenGen] = useState(null);
   const [paymentToken, setPaymentToken] = useState("");
+  const [selectToken, setSelectToken] = useState([]);
   useEffect(() => {
     if (userInfo.email) {
       getlistOfPaymentToken({ email: userInfo.email }, (res) => {
         if (res.data) {
           if (res.data.item.items) {
+            setSelectToken(res?.data?.item?.record ?? []);
             dispatch(
               injectToken({
                 type: actionName.ALL_TOKEN_INJECT,
@@ -41,7 +46,7 @@ export default function PaymentBox(props: PaymentBoxProps) {
     }
   }, [userInfo.email]);
   return (
-    <div className="aspect-video w-[1200px] bg-white shadow-lg flex flex-col">
+    <div className="aspect-video w-[1200px] bg-white shadow-lg flex flex-col max-h-[58vh]">
       <div className="w-full relative p-2 pr-3 flex items-end justify-end cursor-pointer">
         <div
           className="rotate-45 text-3xl w-fit h-fit text-black font-extrabold"
@@ -115,12 +120,12 @@ export default function PaymentBox(props: PaymentBoxProps) {
                                 ) {
                                   dispatch(activeToken(ele));
                                   if (props.onSelectToken) {
-                                    props.onSelectToken(ele)
+                                    props.onSelectToken(ele);
                                   }
                                 } else {
                                   dispatch(removeToken());
                                   if (props.onSelectToken) {
-                                    props.onSelectToken(null)
+                                    props.onSelectToken(null);
                                   }
                                 }
                               }}
@@ -139,18 +144,26 @@ export default function PaymentBox(props: PaymentBoxProps) {
                       <div className="w-full relative text-ellipsis overflow-hidden flex-grow">
                         {ele.token}
                       </div>
-                      <div className=" aspect-square relative min-h-6 max-h-6 h-6 p-1" onClick={()=>{
-                        deleteToken({email:userInfo.email,token:ele.token},(res)=>{
-                          if (res.data) {
-                              if (res.data.item) {
-                                dispatch(injectToken({
-                                  type: actionName.ALL_TOKEN_INJECT,
-                                  list:res.data.item.items,
-                                }))
+                      <div
+                        className=" aspect-square relative min-h-6 max-h-6 h-6 p-1"
+                        onClick={() => {
+                          deleteToken(
+                            { email: userInfo.email, token: ele.token },
+                            (res) => {
+                              if (res.data) {
+                                if (res.data.item) {
+                                  dispatch(
+                                    injectToken({
+                                      type: actionName.ALL_TOKEN_INJECT,
+                                      list: res.data.item.items,
+                                    })
+                                  );
+                                }
                               }
-                          }
-                        })
-                      }} >
+                            }
+                          );
+                        }}
+                      >
                         <DeleteIcon />
                       </div>
                     </div>
@@ -211,8 +224,69 @@ export default function PaymentBox(props: PaymentBoxProps) {
             )}
           </div>
         </div>
-        <div className="w-1/2 relative">
+        <div className="w-1/2 relative flex flex-col pl-2">
           <h3 className={`${fonts.font_1.className}`}>Purchase History</h3>
+          <div className="w-full relative h-[300px] overflow-y-auto">
+            {selectToken.map((ele, index) => (
+              <div className="w-full relative border-b mt-5 pb-2" key={index}>
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>Header</div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {ele.header}
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>Token</div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {ele.token}
+                  </div>
+                </div>
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>Price</div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {ele.amount}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>
+                    Discount
+                  </div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {ele.discount}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>
+                    Quantity
+                  </div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {ele.prodectCount}
+                  </div>
+                </div>
+
+                <div className="flex">
+                  <div className={`${fonts.font_7.className} mr-2`}>Date</div>
+                  <div
+                    className={`whitespace-nowrap overflow-hidden text-ellipsis ${fonts.font_7.className}`}
+                  >
+                    {new Date(ele.create_time).toDateString()}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>

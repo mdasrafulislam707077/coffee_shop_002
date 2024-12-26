@@ -15,7 +15,10 @@ import ProdectCard from "@/app/components/prodectCard/card";
 import RatingComponent from "@/app/components/starbar/starbar";
 import Toast from "@/app/components/toast/toast";
 import favoritePost from "@/app/network/favorite/favorite";
-import { prodectCheck } from "@/app/network/prodect_process/prodect_process";
+import {
+  prodectBuy,
+  prodectCheck,
+} from "@/app/network/prodect_process/prodect_process";
 import { injectProdect } from "@/app/redux/cart/actions";
 import injectFavoriteItems from "@/app/redux/favorite/action";
 import { singleToastActive } from "@/app/redux/toats/action";
@@ -23,7 +26,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { prodectBuy } from "@/app/network/prodect_process/prodect_process";
 const ToastType = {
   PAYMENT_INFO: "PAYMENT_INFO",
   BUY_PROCESS: "BUY_PROCESS",
@@ -49,7 +51,8 @@ export default function ProdectReview(props: ProdectReviewProps) {
   const [toastType, setToastType] = useState(null);
   const [pymentMsg, setPaymentMsg] = useState(null);
   const [activeButtons, setActiveButtons] = useState(null);
-  const [tokenStore,setTokenStore] = useState(null)
+  const [tokenStore, setTokenStore] = useState(null);
+
   useEffect(() => {
     if (props.prodectDetails) {
       setImageList([
@@ -70,7 +73,11 @@ export default function ProdectReview(props: ProdectReviewProps) {
       <Toast center activetoast={toastType}>
         {toastType == ToastType.PAYMENT_INFO ? (
           <PaymentBox
-          onSelectToken={(ele)=>setTokenStore(ele.token)}
+            onSelectToken={(ele) => {
+              if (ele) {
+                setTokenStore(ele.token);
+              }
+            }}
             onClose={() => {
               setToastType(null);
             }}
@@ -78,7 +85,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
         ) : null}
         {toastType == ToastType.BUY_PROCESS ? (
           <PaymentConfirmToast
-          activeButton={activeButtons}
+            activeButton={activeButtons}
             message={pymentMsg}
             onCheck={() => {
               prodectCheck(
@@ -104,17 +111,32 @@ export default function ProdectReview(props: ProdectReviewProps) {
                 }
               );
             }}
-            onYes={()=>{
-              prodectBuy({
-                id: props.prodectDetails?._id,
-                count: cartCount,
-                price: props.prodectDetails.price,
-                discount: props.prodectDetails.discount,
-                token:tokenStore
-              },(res)=>{
-                console.log(res)
-              })
-              
+            onYes={() => {
+              setActiveButtons(false);
+              prodectBuy(
+                {
+                  id: props.prodectDetails?._id,
+                  count: cartCount,
+                  price: props.prodectDetails.price,
+                  discount: props.prodectDetails.discount,
+                  token: tokenStore,
+                  email: userInfo.email,
+                },
+                (res) => {
+                  if (res.data) {
+                    if (res.data.errMsg) {
+                      setPaymentMsg(res.data.errMsg);
+                    } else {
+                      setPaymentMsg("Product purchased successfully...");
+                      setTimeout(() => {
+                        setToastType(null);
+                        setPaymentMsg(null);
+                        setActiveButtons(false);
+                      }, 2000);
+                    }
+                  }
+                }
+              );
             }}
             onClose={() => {
               setToastType(null);

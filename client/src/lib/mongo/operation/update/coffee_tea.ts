@@ -6,9 +6,7 @@ import ItemCoffee from "../../Schema/itemsCoffee/itemsCoffee";
 export async function updateCoffee(query, updateData) {
   await dbConnect();
 
-  const updatedContent = await ItemCoffee.findOneAndUpdate(query, updateData, {
-    new: true, 
-  });
+  const updatedContent = await ItemCoffee.findOneAndUpdate(query, updateData);
 
   return updatedContent;
 }
@@ -16,9 +14,7 @@ export async function updateCoffee(query, updateData) {
 export async function updateTea(query, updateData) {
   await dbConnect();
 
-  const updatedContent = await ItemTea.findOneAndUpdate(query, updateData, {
-    new: true, 
-  });
+  const updatedContent = await ItemTea.findOneAndUpdate(query, updateData);
 
   return updatedContent;
 }

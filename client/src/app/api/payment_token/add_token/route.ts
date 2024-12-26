@@ -19,6 +19,7 @@ export async function POST(req: NextRequest, res) {
           create_time: Date.now(),
         },
       ],
+      record: []
     };
     await createPaymentToken({ ...obj });
   } else {
@@ -37,7 +38,8 @@ export async function POST(req: NextRequest, res) {
       delete cData["__v"]
       await createPaymentToken({
         items:cData.items,
-        email:cData.email
+        email:cData.email,
+        record:cData.record,
         
       });
     }

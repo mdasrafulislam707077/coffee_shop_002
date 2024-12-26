@@ -33,6 +33,7 @@ interface prodectBuyInterface {
   count: string;
   discount: string;
   price: string;
+  email:string
 }
 export function prodectBuy(info: prodectBuyInterface, callback: any) {
   if (!( info.token && info.id && info.count && info.discount!=null && info.price )) {
@@ -44,6 +45,7 @@ export function prodectBuy(info: prodectBuyInterface, callback: any) {
   formdata.append("discount",info.discount)
   formdata.append("price",info.price)
   formdata.append("token",info.token)
+  formdata.append("email",info.email)
   axios
     .post(
       `${config.HOST_SERVER_BASE_POINT}/payment_token/buy_prodect`,

@@ -10,7 +10,7 @@ export async function GET(req: NextRequest, res) {
   });
   let obj = null;
   if (!findEmail) {
-    obj = { email: email, items: [] };
+    obj = { email: email,  record: [] };
     await createPaymentToken({ ...obj });
   } else {
     obj = findEmail;
