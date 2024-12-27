@@ -113,6 +113,7 @@ export default function ProdectReview(props: ProdectReviewProps) {
             }}
             onYes={() => {
               setActiveButtons(false);
+              setPaymentMsg("Processing...")
               prodectBuy(
                 {
                   id: props.prodectDetails?._id,

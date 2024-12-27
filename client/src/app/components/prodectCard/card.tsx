@@ -21,7 +21,7 @@ export default function ProdectCard(props: ProdectProps) {
   const [activeImage, setActiveImage] = useState(false);
   return (
     <div
-      className={`${props.widthFull? "w-full":"w-[350px]" } h-auto ${props.marginOff?"":"m-5"} cursor-pointer relative`}
+      className={`${props.widthFull? "w-full max-w-[600px]":"w-[350px]" } h-auto ${props.marginOff?"":"m-5"} cursor-pointer relative `}
       onClick={() => {
         if (props.onDisplay) {
           props.onDisplay({ prodectId: props.id });

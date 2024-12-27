@@ -32,5 +32,5 @@ export const GET = async (req: NextRequest, context) => {
     totalItems = getItems?.length ?? 0;
     prodectItems = getItems?.slice(0, batchLength);
   }
-  return NextResponse.json({ items: prodectItems,totalPagination:Math.ceil(totalItems / batchLength) });
+  return NextResponse.json({ items: prodectItems,totalPagination:Math.ceil(totalItems / batchLength),totalLength:totalItems });
 };

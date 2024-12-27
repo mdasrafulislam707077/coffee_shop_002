@@ -115,9 +115,8 @@ export default function TeaPage() {
           setToastActive(false);
         }}
       />
-      <div className="w-full relative aspect-[1/1.5] sm:h-[850px] md:h-[650px] xl:h-[900px] ">
+      {/* <div className="w-full relative aspect-[1/1.5] sm:h-[850px] md:h-[650px] xl:h-[900px] ">
         <div className="w-full h-full absolute flex flex-col">
-          {/* <div className=" w-full h-28 z-10 relative "></div> */}
           <div className=" bg-opacity-50 w-full flex-grow z-10 relative flex justify-center items-center flex-col ">
             <div
               className={`w-full  text-white text-center text-4xl xl:text-7xl ${fonts.font_7.className} mb-2 sm:mb-20 md:mt-20 z-40`}
@@ -143,7 +142,7 @@ export default function TeaPage() {
             setActivenav(!activeNav)
           }}/>
         </div>
-      </div>
+      </div> */}
 
       <ProdectBox  />
     </div>
